@@ -52,9 +52,12 @@ public class XMLBuilder {
             , "UTF-8");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("/Users/jackzet/" + id + " " + date));
+
+            //File createFile =  new File("C:\\Users\\Peter\\Desktop\\" + id + " " + date);
+            //if (!createFile.exists()) file.createNewFile();
+            StreamResult result = new StreamResult(new File("C:/Users/Peter/Desktop/" + id));
             transformer.transform(source, result);
-            file = new File("/Users/jackzet/" + id + " " + date);
+            file = new File("C:/Users/Peter/Desktop/" + id);
 
             // Output to console for testing
             StreamResult consoleResult = new StreamResult(System.out);
