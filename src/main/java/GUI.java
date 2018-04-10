@@ -22,6 +22,9 @@ public class GUI extends JFrame {
     JTextField tfText3;
 
     public GUI(){
+
+        JFrame jFrame = new JFrame();
+
         pnPanel0 = new JPanel();
         pnPanel0.setBorder( BorderFactory.createTitledBorder( "" ) );
         GridBagLayout gbPanel0 = new GridBagLayout();
@@ -138,8 +141,9 @@ public class GUI extends JFrame {
         gbPanel0.setConstraints( tfText3, gbcPanel0 );
         pnPanel0.add( tfText3 );
 
-        pnPanel0.setSize(500,500);
-        pnPanel0.setVisible(true);
+        jFrame.add(pnPanel0);
+        jFrame.pack();
+        jFrame.setVisible(true);
 
     }
 
