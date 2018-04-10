@@ -20,6 +20,7 @@ public class Main
     private Date date;
     private String customer;
     private String project;
+    private static TimeComputer timeComputer;
 
     public static void main(String args[]) throws DbxException {
         // Create Dropbox client
@@ -38,13 +39,9 @@ public class Main
         double hoursForXML = Double.valueOf(numberFormat.format(randomHours));
         File file = fileHandler.addHours("Peter_Rosenberg_"+System.currentTimeMillis(), hoursForXML , new Date(2018, 04, 10), "Treco", "Solitare");
 
-        String dropboxDirectory = System.getProperty("user.home")+File.separator+"Dropbox";//Gets the default dropbox folder on the system
-        String timeManagerDirectory = dropboxDirectory + File.separator+"TimeManager"+File.separator; //Changes the Path String to the timeManager directory path
-        System.out.println(timeManagerDirectory);
 
-
-        File[] timeManagerFiles = new File(timeManagerDirectory).listFiles(); //Get a list of files from directory, in this case timeManagerDirectory
-        computeTotalHours(timeManagerFiles); //takes a list of files
+        timeComputer = new TimeComputer();
+        timeComputer.computeTotalHoursInDir("Clients/Firma2"); //takes a list of files
 
 
         //GUI gui = new GUI();
@@ -58,51 +55,9 @@ public class Main
 
         try{
             fileHandler.uploadFile(file);
-            fileHandler.printDirectories();
+            //fileHandler.printDirectories();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-
-    public static void computeTotalHours(File[] files){
-        double totalHours = 0;
-        for (File f : files){
-            if (f.isDirectory())
-            {
-                System.out.println("Directory: " + f.getName());
-                computeTotalHours(f.listFiles());
-            }
-            else
-            {
-                BufferedReader reader = null;
-                try{
-                    reader = new BufferedReader(new FileReader(f));
-                    String line = reader.readLine();
-                    while(line != null){
-                        if ((line.contains("<hours>")))
-                        {
-                            String temp = line.replace("<hours>","");
-                            String temp2 = temp.replace("</hours>","");
-                            totalHours += Double.valueOf(temp2);
-                        }
-                        line = reader.readLine();
-                    }
-                }
-                catch (FileNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        if(totalHours != 0.0) System.out.println("TOTAL HOURS: " + totalHours);
-    }
-
-
-
-
 }
