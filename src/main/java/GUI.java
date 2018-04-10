@@ -2,17 +2,12 @@
  * Created by jackzet on 10/04/2018.
  */
 
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
+import javax.swing.*;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 
-public class GUI {
+public class GUI extends JFrame {
 
 
     JPanel pnPanel0;
@@ -142,6 +137,9 @@ public class GUI {
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbPanel0.setConstraints( tfText3, gbcPanel0 );
         pnPanel0.add( tfText3 );
+
+        pnPanel0.setSize(500,500);
+        pnPanel0.setVisible(true);
 
     }
 

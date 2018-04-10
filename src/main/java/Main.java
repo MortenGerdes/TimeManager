@@ -33,11 +33,14 @@ public class Main
 
         File file = addHours("Peter Rosenberg", 5.7, new Date(2018, 04, 10), "Treco", "Solitare");
 
+        GUI gui = new GUI();
+
+        /*
         try{
             deleteFile("/test.xml");
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
 
        /* try{
             uploadFile(file);
