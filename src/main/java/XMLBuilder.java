@@ -60,8 +60,8 @@ public class XMLBuilder {
             file = new File("C:/Users/Peter/Desktop/" + id);
 
             // Output to console for testing
-            StreamResult consoleResult = new StreamResult(System.out);
-            transformer.transform(source, consoleResult);
+            //StreamResult consoleResult = new StreamResult(System.out);
+            //transformer.transform(source, consoleResult);
 
 
         } catch (Exception e) {

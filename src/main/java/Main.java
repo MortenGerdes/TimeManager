@@ -41,10 +41,9 @@ public class Main
 
 
         timeComputer = new TimeComputer();
-        timeComputer.computeTotalHoursInDir("Clients/Firma2"); //takes a list of files
+        System.out.println("Total hours, main: "+timeComputer.computeTotalHoursInDir("Clients/Treco"));
 
-
-        //GUI gui = new GUI();
+        GUI gui = new GUI();
 
         /*
         try{

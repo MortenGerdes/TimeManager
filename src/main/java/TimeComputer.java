@@ -39,6 +39,7 @@ public class TimeComputer
                             String temp = line.replace("<hours>","");
                             String temp2 = temp.replace("</hours>","");
                             totalHours += Double.valueOf(temp2);
+                            totalHoursInPath += Double.valueOf(temp2);
                         }
                         line = reader.readLine();
                     }

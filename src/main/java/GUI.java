@@ -44,7 +44,7 @@ public class GUI extends JFrame {
         pnPanel0.add( lbLabel0 );
 
         String []dataCombo0 = { "Treco ", "--- Solitaire", "--- --- GUI Design",
-                "--- --- Data-structure", "--- Deutche Post" };
+                "--- --- Data-structure", "--- Deutche Post", "Firma2", "--- Projekt1", "--- --- Delprojekt1.1", "--- --- Delprojekt1.2", "Firma3" };
         cmbCombo0 = new JComboBox( dataCombo0 );
         gbcPanel0.gridx = 6;
         gbcPanel0.gridy = 1;
@@ -105,7 +105,7 @@ public class GUI extends JFrame {
         gbPanel0.setConstraints( tfText2, gbcPanel0 );
         pnPanel0.add( tfText2 );
 
-        btBut1 = new JButton( "Tilføj note"  );
+        btBut1 = new JButton( "Tilføj timer"  );
         gbcPanel0.gridx = 4;
         gbcPanel0.gridy = 8;
         gbcPanel0.gridwidth = 11;
