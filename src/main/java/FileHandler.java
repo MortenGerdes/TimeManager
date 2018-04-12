@@ -1,5 +1,4 @@
 import com.dropbox.core.DbxException;
-import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
@@ -9,85 +8,105 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by jackzet on 10/04/2018.
  */
-public class FileHandler {
+public class FileHandler
+{
+	private DbxClientV2 client;
 
-    private DbxClientV2 client;
+	public FileHandler(DbxClientV2 client)
+	{
+		this.client = client;
+	}
 
+	public void printDirectories()
+	{
 
-    public FileHandler(DbxClientV2 client) {
-        this.client = client;
-    }
+		ListFolderResult result = null;
+		// Get files and folder metadata from Dropbox root directory
+		try
+		{
+			result = client.files().listFolder("");
 
-    public void printDirectories() {
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		while(true)
+		{
+			for(Metadata metadata : result.getEntries())
+			{
+				System.out.println(metadata.getPathLower());
+			}
 
-        ListFolderResult result = null;
-        // Get files and folder metadata from Dropbox root directory
-        try {
-            result = client.files().listFolder("");
+			if(!result.getHasMore())
+			{
+				break;
+			}
+			try
+			{
+				result = client.files().listFolderContinue(result.getCursor());
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        while (true) {
-            for (Metadata metadata : result.getEntries()) {
-                System.out.println(metadata.getPathLower());
-            }
+		}
+	}
 
-            if (!result.getHasMore()) {
-                break;
-            }
-            try {
-                result = client.files().listFolderContinue(result.getCursor());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+	public void deleteFile(String path)
+	{
+		try
+		{
+			Metadata metaData = client.files().delete(path);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 
-        }
-    }
+	}
 
-    public void deleteFile(String path){
-        try{
-            Metadata metaData = client.files().delete(path);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+	public void test()
+	{
 
-    }
+	}
 
-    public void test(){
+	public void uploadFile(File file) throws DbxException, IOException
+	{
+		// Upload "test.txt" to Dropbox
+		InputStream in = null;
+		try
+		{
+			in = new FileInputStream(file);
+			String filename = file.getName() + ".xml";
+			String filePath = "/TimeManager/Clients/Treco/Solitaire/" + filename;
+			System.out.println(filePath);
+			FileMetadata metadata = client.files().uploadBuilder(filePath).uploadAndFinish(in);
 
-    }
+			System.out.println("The file was uploaded to dropbox");
 
-    public void uploadFile(File file) throws DbxException, IOException {
-        // Upload "test.txt" to Dropbox
-        InputStream in = null;
-        try {
-                in = new FileInputStream(file);
-                String filename = file.getName()+".xml";
-                String filePath = "/TimeManager/Clients/Treco/Solitaire/"+filename;
-                System.out.println(filePath);
-            FileMetadata metadata = client.files().uploadBuilder(filePath).uploadAndFinish(in);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			in.close();
+		}
 
-            System.out.println("The file was uploaded to dropbox");
+	}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            in.close();
-        }
-
-    }
-
-    public File addHours(String id, double hours, Date date, String customer, String project){
-        XMLBuilder builder = new XMLBuilder();
-        return builder.buildXML(id, hours, date, customer, project);
-    }
+	public File addHours(String id, double hours, Date date, String customer, String project)
+	{
+		XMLBuilder builder = new XMLBuilder();
+		return builder.buildXML(id, hours, date, customer, project);
+	}
 
 }
