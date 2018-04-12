@@ -9,24 +9,28 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class CellGUI extends Application
 {
 	private final String[] arrayOfDays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
 	private int rows = 10;
 	private GridPane mainGrid, weekDayGrid, dropdownGrid, sumGridRight, sumGridButtom;
-	private ObservableList<String> projects = FXCollections.observableArrayList(
-		"Treco",
-		"ThisNameIsDefinitelyTooLong",
-		"NanoPark",
-		"Frokost",
-		"Kopper",
-		"Yolo",
-		"Swag"
-		);
-
+	private ObservableList<String> projects = FXCollections.observableArrayList();
+	private TimeComputer timeComputer = new TimeComputer();
 	public void start(Stage primaryStage)
 	{
+
+		ArrayList<String> listOfProjects = timeComputer.recursiveDirectoryNameList("Clients");
+		if (listOfProjects.isEmpty()){
+			System.out.println("List of projects is empty! Look for error in the path, while making list of projects.");
+		}
+		for (String s : listOfProjects){
+			projects.add(s);
+		}
+
 		mainGrid = new GridPane();
 		weekDayGrid = generateGrid();
 		dropdownGrid = generateDropDowns();
@@ -66,7 +70,7 @@ public class CellGUI extends Application
 		GridPane grid = new GridPane();
 		grid.setVgap(10);
 		grid.setHgap(2);
-		grid.setPadding(new Insets(15, 8, 0, 0));
+		grid.setPadding(new Insets(15, 8, 0, 10));
 		for(int i = 0; i < rows-1; i++)
 		{
 			ComboBox cb = new ComboBox(projects);
@@ -90,7 +94,6 @@ public class CellGUI extends Application
 			tf.setMinWidth(40);
 			grid.add(tf, 0, i+2);
 		}
-
 		return grid;
 	}
 

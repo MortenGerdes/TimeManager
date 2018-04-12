@@ -27,6 +27,9 @@ public class Main
 		System.out.println(account.getName().getDisplayName());
 		*/
 		Application.launch(CellGUI.class, args);
+
+		TimeComputer nameTest = new TimeComputer();
+        System.out.println(nameTest.recursiveDirectoryNameList("Clients"));
 		/*
 		FileHandler fileHandler = new FileHandler(client);
 		DecimalFormat numberFormat = new DecimalFormat("#.00"); //decimal format so we dont get 10000 decimals on the double

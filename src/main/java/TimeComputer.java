@@ -1,25 +1,32 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by Peter on 10-Apr-18.
  */
 public class TimeComputer
 {
+    private ArrayList<String> projectNameList = new ArrayList<String>();
 	private double totalHoursInPath = 0.0;
+    String indent = "";
 
 	private String dropboxDirectory = System
 			.getProperty("user.home") + File.separator + "Dropbox";//Gets the default dropbox folder on the system
+    private String timeManagerDirectory = dropboxDirectory + File.separator + "TimeManager" + File.separator;
+    public File[] getFilesInDir(String path){
+        String pathDirectory = timeManagerDirectory + path + File.separator; //Changes the Path String to the timeManager directory path
+        File[] pathFiles = new File(pathDirectory).listFiles(); //Get a list of files from directory, in this case timeManagerDirectory
+        return pathFiles;
+    }
 
 	public double computeTotalHoursInDir(String path)
 	{
-		String pathDirectory = dropboxDirectory + File.separator + "TimeManager" + File.separator + path + File.separator; //Changes the Path String to the timeManager directory path
-		File[] pathFiles = new File(pathDirectory)
-				.listFiles(); //Get a list of files from directory, in this case timeManagerDirectory
+		File[] pathFiles = getFilesInDir("Clients");
 
 		if(pathFiles == null)
 		{
-			System.out
-					.println("Path: \"" + pathDirectory + "\" does not contain any Files or Folders. It might not exist.");
+			System.out.println("Path: \"" + dropboxDirectory + File.separator + "TimeManager" +
+                            File.separator + path + "\" does not contain any Files or Folders. It might not exist.");
 		}
 		else
 		{
@@ -73,6 +80,25 @@ public class TimeComputer
 			System.out.println("TOTAL HOURS: " + totalHours);
 		}
 	}
+    public ArrayList<String> recursiveDirectoryNameList(String path){
+        File[] filesToList = getFilesInDir(path);
+        return recursiveDirectoryNameList(filesToList);
+    }
 
+    private ArrayList<String> recursiveDirectoryNameList(File[] files)
+    {
+        for(File f : files)
+        {
+            if(f.isDirectory())
+            {
+                projectNameList.add(indent+f.getName());
+                String tempIndent = indent;
+                indent += "--- ";
+                recursiveDirectoryNameList(f.listFiles());
+                indent = tempIndent;
+            }
+        }
+        return projectNameList;
+    }
 
 }
