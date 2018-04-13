@@ -82,7 +82,7 @@ public class TimeComputer
 	}
     public ArrayList<String> recursiveDirectoryNameList(String path){
         File[] filesToList = getFilesInDir(path);
-		if (filesToList.length == 0) return new ArrayList<String>();
+		if (filesToList == null) return new ArrayList<String>();
         return recursiveDirectoryNameList(filesToList);
     }
 
