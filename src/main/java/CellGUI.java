@@ -19,6 +19,7 @@ public class CellGUI extends Application
 	private final String[] arrayOfDays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
 	private int rows = 10;
+	private int columns = 7;
 	private GridPane mainGrid, weekDayGrid, dropdownGrid, sumGridRight, sumGridButtom;
 	private ObservableList<String> projects = FXCollections.observableArrayList();
 	private TimeComputer timeComputer = new TimeComputer();
@@ -64,6 +65,7 @@ public class CellGUI extends Application
 					public void handle(MouseEvent event)
 					{
 						calculateRightSums();
+						calculateButtomSums();
 					}
 				});
 
@@ -132,6 +134,7 @@ public class CellGUI extends Application
 
 			for(int i = 0; i < weekDayGrid.getChildren().size(); i++)
 			{
+				String input = "0";
 				Node node = weekDayGrid.getChildren().get(i);
 				TextField tf;
 				if(!(node instanceof TextField))
@@ -140,15 +143,39 @@ public class CellGUI extends Application
 				}
 				tf = (TextField) node;
 
-				if(i % rows == k)
+				if(i % rows == k && tf.getCharacters().toString().isEmpty() == false)
 				{
-					if(tf.getCharacters().length() != 0)
-					{
-						sum += Integer.parseInt(tf.getCharacters().toString());
-						((TextField)(sumGridRight.getChildren().get(k))).setPromptText("" + sum);
-					}
+					input = tf.getCharacters().toString();
+					sum += Integer.parseInt(input);
 				}
+				((TextField)(sumGridRight.getChildren().get(k))).setPromptText("" + sum);
 			}
 		}
+	}
+
+	private void calculateButtomSums(){
+
+
+		for (int j = 0; j < sumGridButtom.getChildren().size(); j++){
+
+			int sum = 0;
+
+			for(int i = 0; i < weekDayGrid.getChildren().size(); i++){
+				Node node = weekDayGrid.getChildren().get(i);
+				TextField tf;
+				if(!(node instanceof TextField))
+				{
+					continue;
+				}
+				tf = (TextField) node;
+
+				if (Math.floor(i/rows) == j && tf.getCharacters().toString().isEmpty() == false){
+					sum += Integer.parseInt(tf.getCharacters().toString());
+				}
+				((TextField)(sumGridButtom.getChildren().get(j))).setPromptText("" + sum);
+			}
+		}
+
+
 	}
 }
