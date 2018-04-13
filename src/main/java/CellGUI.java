@@ -1,15 +1,17 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class CellGUI extends Application
@@ -22,16 +24,14 @@ public class CellGUI extends Application
 	private TimeComputer timeComputer = new TimeComputer();
 	public void start(Stage primaryStage)
 	{
-
 		ArrayList<String> listOfProjects = timeComputer.recursiveDirectoryNameList("Clients");
 		if (listOfProjects.isEmpty()){
 			System.out.println("List of projects is empty! Look for error in the path, while making list of projects.");
 		}
-		for (String s : listOfProjects){
-			projects.add(s);
-		}
+		projects.addAll(listOfProjects);
 
 		mainGrid = new GridPane();
+
 		weekDayGrid = generateGrid();
 		dropdownGrid = generateDropDowns();
 		sumGridRight = generateRightSumFields();
@@ -40,7 +40,7 @@ public class CellGUI extends Application
 		mainGrid.add(weekDayGrid, 1, 0);
 		mainGrid.add(dropdownGrid, 0, 0);
 		mainGrid.add(sumGridRight, 2, 0);
-		mainGrid.add(sumGridButtom, 1, 1);
+		mainGrid.add(sumGridButtom, 1, 2);
 
 		primaryStage.setTitle("Time Manager");
 		primaryStage.setScene(new Scene(mainGrid, 500, 380));
@@ -50,15 +50,24 @@ public class CellGUI extends Application
 	private GridPane generateGrid()
 	{
 		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(8, 0, 0, 0));
 		grid.setVgap(10);
 		grid.setHgap(2);
+		grid.setPadding(new Insets(8, 0, 0, 0));
 		for(int i = 0; i < arrayOfDays.length; i++) //Rows
 		{
 			grid.add(new Label(arrayOfDays[i]), i , 0);
 			for(int j = 1; j < rows; j++) // Col
 			{
-				grid.add(new TextField(), i, j);
+				TextField tf = new TextField();
+				tf.setOnMouseReleased(new EventHandler<MouseEvent>()
+				{
+					public void handle(MouseEvent event)
+					{
+						calculateRightSums();
+					}
+				});
+
+				grid.add(tf, i, j);
 			}
 		}
 
@@ -73,7 +82,7 @@ public class CellGUI extends Application
 		grid.setPadding(new Insets(15, 8, 0, 10));
 		for(int i = 0; i < rows-1; i++)
 		{
-			ComboBox cb = new ComboBox(projects);
+			ComboBox<String> cb = new ComboBox<String>(projects);
 			cb.setMinWidth(100);
 			grid.add(cb, 0, i+2);
 		}
@@ -113,5 +122,33 @@ public class CellGUI extends Application
 		}
 
 		return grid;
+	}
+
+	private void calculateRightSums()
+	{
+		for(int k = 1; k < sumGridRight.getChildren().size(); k++)
+		{
+			int sum = 0;
+
+			for(int i = 0; i < weekDayGrid.getChildren().size(); i++)
+			{
+				Node node = weekDayGrid.getChildren().get(i);
+				TextField tf;
+				if(!(node instanceof TextField))
+				{
+					continue;
+				}
+				tf = (TextField) node;
+
+				if(i % rows == k)
+				{
+					if(tf.getCharacters().length() != 0)
+					{
+						sum += Integer.parseInt(tf.getCharacters().toString());
+						((TextField)(sumGridRight.getChildren().get(k))).setPromptText("" + sum);
+					}
+				}
+			}
+		}
 	}
 }
