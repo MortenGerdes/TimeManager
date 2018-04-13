@@ -56,6 +56,7 @@ public class CellGUI extends Application
 
 		primaryStage.setTitle("Time Manager");
 		primaryStage.setScene(new Scene(mainGrid, 500, 380));
+		// primaryStage.setScene(new Scene(mainGrid));
 		primaryStage.show();
 	}
 
@@ -154,7 +155,7 @@ public class CellGUI extends Application
 				}
 				tf = (TextField) node;
 
-				if(i % rows == k && tf.getCharacters().toString().isEmpty() == false)
+				if(i % rows == k && !tf.getCharacters().toString().isEmpty())
 				{
 					input = tf.getCharacters().toString();
 					sum += Integer.parseInt(input);
@@ -180,7 +181,7 @@ public class CellGUI extends Application
 				}
 				tf = (TextField) node;
 
-				if (Math.floor(i/rows) == j && tf.getCharacters().toString().isEmpty() == false){
+				if (Math.floor(i/rows) == j && !tf.getCharacters().toString().isEmpty()){
 					sum += Integer.parseInt(tf.getCharacters().toString());
 				}
 				((TextField)(sumGridButtom.getChildren().get(j))).setPromptText("" + sum);
