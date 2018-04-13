@@ -21,7 +21,16 @@ public class CellGUI extends Application
 	private int rows = 10;
 	private int columns = 7;
 	private GridPane mainGrid, weekDayGrid, dropdownGrid, sumGridRight, sumGridButtom;
-	private ObservableList<String> projects = FXCollections.observableArrayList();
+	//private ObservableList<String> projects = FXCollections.observableArrayList();
+    private ObservableList<String> projects = FXCollections.observableArrayList(
+            "Treco",
+            "ThisNameIsDefinitelyTooLong",
+            "NanoPark",
+            "Frokost",
+            "Kopper",
+            "Yolo",
+            "Swag"
+    );
 	private TimeComputer timeComputer = new TimeComputer();
 	public void start(Stage primaryStage)
 	{
@@ -30,6 +39,8 @@ public class CellGUI extends Application
 			System.out.println("List of projects is empty! Look for error in the path, while making list of projects.");
 		}
 		projects.addAll(listOfProjects);
+
+
 
 		mainGrid = new GridPane();
 
