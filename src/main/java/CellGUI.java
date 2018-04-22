@@ -1,14 +1,12 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -32,6 +30,7 @@ public class CellGUI extends Application
             "Swag"
     );
 	private TimeComputer timeComputer = new TimeComputer();
+
 	public void start(Stage primaryStage)
 	{
 		ArrayList<String> listOfProjects = timeComputer.recursiveDirectoryNameList("Clients");
@@ -72,13 +71,10 @@ public class CellGUI extends Application
 			for(int j = 1; j < rows; j++) // Col
 			{
 				TextField tf = new TextField();
-				tf.setOnMouseReleased(new EventHandler<MouseEvent>()
+				tf.setOnMouseReleased(event ->
 				{
-					public void handle(MouseEvent event)
-					{
-						calculateRightSums();
-						calculateButtomSums();
-					}
+					calculateRightSums();
+					calculateButtomSums();
 				});
 
 				grid.add(tf, i, j);
@@ -96,7 +92,7 @@ public class CellGUI extends Application
 		grid.setPadding(new Insets(15, 8, 0, 10));
 		for(int i = 0; i < rows-1; i++)
 		{
-			ComboBox<String> cb = new ComboBox<String>(projects);
+			ComboBox cb = new ComboBox(projects.sorted());
 			cb.setMinWidth(100);
 			grid.add(cb, 0, i+2);
 		}
