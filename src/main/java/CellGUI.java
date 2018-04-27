@@ -1,16 +1,17 @@
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CellGUI extends Application
 {
@@ -20,16 +21,17 @@ public class CellGUI extends Application
 	private int columns = 7;
 	private GridPane mainGrid, weekDayGrid, dropdownGrid, sumGridRight, sumGridButtom;
 	//private ObservableList<String> projects = FXCollections.observableArrayList();
-    private ObservableList<String> projects = FXCollections.observableArrayList(
-            "Treco",
-            "ThisNameIsDefinitelyTooLong",
-            "NanoPark",
-            "Frokost",
-            "Kopper",
-            "Yolo",
-            "Swag"
-    );
+	private ObservableList<String> projects = FXCollections.observableArrayList(
+			"Treco",
+			"ThisNameIsDefinitelyTooLong",
+			"NanoPark",
+			"Frokost",
+			"Kopper",
+			"Yolo",
+			"Swag"
+	);
 	private TimeComputer timeComputer = new TimeComputer();
+	private TableView table;
 
 	public void start(Stage primaryStage)
 	{
@@ -47,16 +49,65 @@ public class CellGUI extends Application
 		dropdownGrid = generateDropDowns();
 		sumGridRight = generateRightSumFields();
 		sumGridButtom = generateButtomSumFields();
+		table = generateTableView();
 
-		mainGrid.add(weekDayGrid, 1, 0);
+		//mainGrid.add(weekDayGrid, 1, 0);
 		mainGrid.add(dropdownGrid, 0, 0);
 		mainGrid.add(sumGridRight, 2, 0);
 		mainGrid.add(sumGridButtom, 1, 2);
+		mainGrid.add(table, 1, 0);
 
 		primaryStage.setTitle("Time Manager");
-		primaryStage.setScene(new Scene(mainGrid, 500, 380));
+		primaryStage.setScene(new Scene(mainGrid, 600, 450));
 		// primaryStage.setScene(new Scene(mainGrid));
 		primaryStage.show();
+	}
+
+	private TableView generateTableView(){
+		TableView<Integer> table = new TableView();
+		List<Integer> intValues = Arrays.asList(0, 0, 0, 0, 0);
+		List<TableColumn<Integer, Number>> columns = new ArrayList<>();
+
+		table.setEditable(true);
+
+		TableColumn<Integer, Number> mondayColumn = new TableColumn("Mon");
+		TableColumn<Integer, Number> tuesdayColumn = new TableColumn("Tue");
+		TableColumn<Integer, Number> wednesdayColumn = new TableColumn("Wed");
+		TableColumn<Integer, Number> thursdayColumn = new TableColumn("Thu");
+		TableColumn<Integer, Number> fridayColumn = new TableColumn("Fri");
+		TableColumn<Integer, Number> saturdayColumn = new TableColumn("Sat");
+		TableColumn<Integer, Number> sundayColumn = new TableColumn("Sun");
+
+		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		/*mondayColumn.setCellValueFactory(TextFieldTableCell.forTableColumn());
+		mondayColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Integer, Number>>() {
+			@Override
+			public void handle(TableColumn.CellEditEvent<Integer, Number> event) {
+				event.getTableView().getItems().get(event.getTablePosition().getRow());
+			}
+		});*/
+
+		columns.add(mondayColumn);
+		columns.add(tuesdayColumn);
+		columns.add(wednesdayColumn);
+		columns.add(thursdayColumn);
+		columns.add(fridayColumn);
+		columns.add(saturdayColumn);
+		columns.add(sundayColumn);
+
+		for (int i = 0; i < intValues.size(); i++) {
+			table.getItems().add(i);
+		}
+		table.getColumns().addAll(columns);
+
+		for(TableColumn<Integer, Number> tc: columns)
+		{
+			tc.setCellValueFactory(cellData -> {
+				Integer rowIndex = cellData.getValue();
+				return new ReadOnlyIntegerWrapper(intValues.get(rowIndex));
+			});
+		}
+		return table;
 	}
 
 	private GridPane generateGrid()
