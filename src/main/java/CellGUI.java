@@ -1,17 +1,17 @@
 import javafx.application.Application;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.converter.NumberStringConverter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CellGUI extends Application
 {
@@ -64,49 +64,71 @@ public class CellGUI extends Application
 	}
 
 	private TableView generateTableView(){
-		TableView<Integer> table = new TableView();
-		List<Integer> intValues = Arrays.asList(0, 0, 0, 0, 0);
-		List<TableColumn<Integer, Number>> columns = new ArrayList<>();
+		TableView<PersonWeekOverview> table = new TableView<>();
+		ObservableList<PersonWeekOverview> data = FXCollections.observableArrayList(
+				new PersonWeekOverview(1, 4 ,6, 23, 5, 1, 5, 7),
+				new PersonWeekOverview(1, 12 ,7, 6, 2, 7, 0, 0),
+				new PersonWeekOverview(1, 4 ,6, 23, 5, 1, 5, 7)
+				);
 
 		table.setEditable(true);
 
-		TableColumn<Integer, Number> mondayColumn = new TableColumn("Mon");
-		TableColumn<Integer, Number> tuesdayColumn = new TableColumn("Tue");
-		TableColumn<Integer, Number> wednesdayColumn = new TableColumn("Wed");
-		TableColumn<Integer, Number> thursdayColumn = new TableColumn("Thu");
-		TableColumn<Integer, Number> fridayColumn = new TableColumn("Fri");
-		TableColumn<Integer, Number> saturdayColumn = new TableColumn("Sat");
-		TableColumn<Integer, Number> sundayColumn = new TableColumn("Sun");
+		TableColumn mondayColumn = new TableColumn("Mon");
+		mondayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursMon")
+		);
+		mondayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+
+		TableColumn tuesdayColumn = new TableColumn("Tue");
+		tuesdayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursTue")
+		);
+		tuesdayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+
+		TableColumn wednesdayColumn = new TableColumn("Wed");
+		wednesdayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursWed")
+		);
+		wednesdayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+
+		TableColumn thursdayColumn = new TableColumn("Thu");
+		thursdayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursThu")
+		);
+		thursdayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+
+		TableColumn fridayColumn = new TableColumn("Fri");
+		fridayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursFri")
+		);
+		fridayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+
+		TableColumn saturdayColumn = new TableColumn("Sat");
+		saturdayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursSat")
+		);
+		saturdayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+
+		TableColumn sundayColumn = new TableColumn("Sun");
+		sundayColumn.setCellValueFactory(
+				new PropertyValueFactory<PersonWeekOverview, String>("hoursSun")
+		);
+		sundayColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
 
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		/*mondayColumn.setCellValueFactory(TextFieldTableCell.forTableColumn());
-		mondayColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Integer, Number>>() {
-			@Override
-			public void handle(TableColumn.CellEditEvent<Integer, Number> event) {
-				event.getTableView().getItems().get(event.getTablePosition().getRow());
-			}
-		});*/
+		table.getSelectionModel().cellSelectionEnabledProperty().set(true);
 
-		columns.add(mondayColumn);
-		columns.add(tuesdayColumn);
-		columns.add(wednesdayColumn);
-		columns.add(thursdayColumn);
-		columns.add(fridayColumn);
-		columns.add(saturdayColumn);
-		columns.add(sundayColumn);
+		table.setItems(data);
+		table.getColumns().addAll(mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn);
 
-		for (int i = 0; i < intValues.size(); i++) {
-			table.getItems().add(i);
-		}
-		table.getColumns().addAll(columns);
-
-		for(TableColumn<Integer, Number> tc: columns)
+/*		for(TableColumn<PersonWeekOverview, String> tc: columns)
 		{
-			tc.setCellValueFactory(cellData -> {
-				Integer rowIndex = cellData.getValue();
-				return new ReadOnlyIntegerWrapper(intValues.get(rowIndex));
+			tc.setCellFactory(TextFieldTableCell.forTableColumn());
+			tc.setOnEditCommit(event ->
+			{
+				event.getTableView().getItems().get(event.getTablePosition().getRow()).s);
 			});
-		}
+		}*/
 		return table;
 	}
 
